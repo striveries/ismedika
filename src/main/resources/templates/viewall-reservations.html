@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservations</title>
+    <!-- Add Bootstrap and DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+                <h1 class="my-4">Reservations</h1>
+
+                <!-- Table for Reservation data -->
+                <table id="table-ruangan" class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Nomor</th>
+                            <th scope="col" class="text-center">ID</th>
+                            <th scope="col" class="text-center">Room Name</th>
+                            <th scope="col" class="text-center">Patient Name</th>
+                            <th scope="col" class="text-center">Date In</th>
+                            <th scope="col" class="text-center">Date Out</th>
+                            <th scope="col" class="text-center">Status</th>
+                            <th scope="col" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="reservation, iterStat : ${listReservation}">
+                            <td th:text="${iterStat.index + 1}"></td>
+                            <td th:text="${reservation.id}"></td>
+                            <td th:text="${reservation.room.name}"></td>
+                            <td th:text="${reservation.patient.name}"></td>
+                            <td th:text="${reservation.dateIn}"></td>
+                            <td th:text="${reservation.dateOut}"></td>
+                            <td th:text="${reservation.status}"></td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/reservations/{ReservationId}(ReservationId=${reservation.id})}">Detail</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="my-3">
+                    <a th:href="@{/reservations/create}" class="btn btn-success">Add New Reservation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add jQuery and DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function () {
+            $('#table-ruangan').DataTable({
+                "lengthMenu": [10, 20, 30], // Custom rows per page
+                "paging": true, // Enable pagination
+                "searching": true // Enable search functionality
+            });
+        });
+    </script>
+</body>
+</html>
+
+

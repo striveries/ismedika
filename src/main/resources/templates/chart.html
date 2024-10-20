@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Reservation Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Include Bootstrap CSS -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Reservation Statistics for Year <span th:text="${year}"></span></h2>
+        <p th:field="${reservationStats}" id="${reservationStats}" value="${reservationStats}"></p>
+        
+        <form th:action="@{/reservations/chart/search}" method="GET" class="row mb-4">
+            <label for="year">Year</label>
+            <select  id="selectedYear" name="selectedYear" class="form-control" required>
+                <option value="" disabled selected>Select Year</option>
+                <option th:each="year : ${availableYears}" 
+                th:value="${year}" 
+                th:text="${year}">
+            </option>
+            </select>
+            <label for="periode">Periode</label>
+            <select  id="selectedPeriod" name="selectedPeriod" class="form-control" required>
+                <option value="" disabled selected>Select Period</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+            </select>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
+
+
+        <canvas id="reservationChart"></canvas>
+        
+    
+    </div>
+
+    <script th:inline="javascript">
+        const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+        ];
+        const quarterNames = [
+        "Q1", "Q2","Q3","Q4"
+        ];
+        const reservationStats = JSON.parse(/*[[${reservationStats}]]*/ '[]');
+        console.log('Reservation Stats:', reservationStats); 
+        const periodLabel = /*[[${period}]]*/ '';
+        const yearLabel = /*[[${year}]]*/ '';
+
+        let labels, counts;
+    if (periodLabel == 'quarterly') {
+        labels = quarterNames; 
+        counts = reservationStats.map(stat => stat.reservationCount);
+
+        if (counts.length < 4) {
+            const emptyCounts = [0, 0, 0, 0]; 
+            reservationStats.forEach(stat => emptyCounts[stat.period - 1] = stat.reservationCount);
+            counts = emptyCounts; 
+        }
+    } else {
+        labels = monthNames;
+        counts = reservationStats.map(stat => stat.reservationCount);
+    }
+
+        const ctx = document.getElementById('reservationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',  
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `Reservations (${periodLabel} - ${yearLabel})`,
+                    data: counts,
+                    backgroundColor: 'rgba(111,66,193, 0.2)',
+                    borderColor: 'rgba(111,66,193, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,  
+                            callback: function(value) {
+                                return value; 
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+    </script>
+</body>
+</html>

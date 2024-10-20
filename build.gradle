@@ -24,16 +24,42 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot dependencies
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' 
+
+	// Lombok (For getter, setter, etc.)
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// PostgreSQL Database Driver
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// Developer tools (hot reloading)
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'	
+	testImplementation 'org.mockito:mockito-core:4.0.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
+	
+
+
+
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+tasks.withType(JavaCompile) {
+	configure(options) {
+		options.compilerArgs << '-parameters'
+	}
 }
