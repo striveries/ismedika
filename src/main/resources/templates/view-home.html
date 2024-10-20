@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+ 
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/custom.css}"> 
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script> 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <object th:include="~{fragments/common :: js}" th:remove="tag "></object>
+  <object th:include="~{fragments/common :: css}" th:remove="tag "></object>
+  <title>Home</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container row mx-auto my-50 d-flex justify-content-center text-center position-absolute top-50 start-50 translate-middle">
+      <div class="flex my-10">
+        <h1 class="text-center">Hospitalization System</h1>
+      </div>
+      <div class="container row gap-3 justify-content-md-center ">
+        <div class="card  col text-white text-center my-5 p-5 shadow-lg p-3 mb-5 rounded" style="max-width: 18rem; background-color: #6f42c1; ">
+          <p class="h1 text-center" th:text="${totalReservations}"></p>
+          <p><strong></strong>Reservations Created</p>
+        </div>
+        <div class="card col text-white text-center my-5  p-5 shadow-lg p-3 mb-5 rounded" style="max-width: 18rem; background-color: #6f42c1;">
+          <p class="h1 text-center" th:text="${totalRooms}"></p>
+          <p>Rooms Recorded</p>
+        </div>
+        <div class="card col text-white text-center my-5  p-5 shadow-lg p-3 mb-5 rounded" style="max-width: 18rem; background-color: #6f42c1;">
+          <p class="h1 text-center" th:text="${totalPatients}"></p>
+          <p>Patients Recorded</p>
+        </div>
+      </div>
+    </div>
+
+</body>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</html>

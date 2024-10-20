@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Patient</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container mt-5">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Step 1 of 3</h2>
+                <h4 class="text-center">Create Patient</h4>
+            </div>
+        </div>
+
+        <form class="mt-4" th:action="@{/patients/create}" method="post" th:object="${patientDTO}">
+            <div class="row">
+                <!-- Name -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name" required>
+                    </div>
+                </div>
+
+                <!-- NIK -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="nik" class="form-label">NIK</label>
+                        <input type="text" th:field="*{NIK}" class="form-control" id="nik" placeholder="NIK" required>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Email" required>
+                    </div>
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="birthDate" class="form-label">Date of Birth</label>
+                        <input type="date" th:field="*{birthDate}" class="form-control" id="birthDate" placeholder="dd-mm-yyyy" required>
+                    </div>
+                </div>
+
+                <!-- Gender -->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{gender}" value="true" id="male" required>
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{gender}" value="false" id="female" required>
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="row mt-4">
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary">Save & Continue</button>
+                    <a href="/" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76A3fV1AC9tlpI4T7k2kAwBLjI5YTKnwl46jI2z3GzEEEnL9E9N7/+qJ4rsIYp" crossorigin="anonymous"></script>
+</body>
+</html>

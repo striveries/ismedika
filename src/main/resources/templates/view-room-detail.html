@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Ruangan</title>
+    <!-- Include Bootstrap CSS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+</head>
+
+<body>
+    <!-- Include Navbar -->
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container mt-5">
+        <div class="card m-4 p-4">
+            <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Detail Ruangan</h1>
+                </div>
+            </div>
+
+            <!-- Room Details Section -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <p><strong>ID:</strong> <span th:text="${room.id}"></span></p>
+                    <p><strong>Nama:</strong> <span th:text="${room.name}"></span></p>
+                    <p><strong>Kapasitas Maksimal:</strong> <span th:text="${room.maxCapacity}"></span></p>
+                    <p><strong>Harga per Hari:</strong> <span th:text="${room.pricePerDay}"></span></p>
+                    <p><strong>Deskripsi:</strong> <span th:text="${room.description}"></span></p>
+                </div>
+            </div>
+
+            <!-- Reservation Filter Section -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h2>Patient</h2>
+                    <form class="row g-3" th:action="@{/rooms/{roomId}(roomId=${room.id})}" method="get">
+                        <div class="col-md-4">
+                            <label for="dateIn" class="form-label">Tanggal Masuk (dd-MM-yyyy):</label>
+                            <input type="date" class="form-control" name="dateIn" th:value="${dateIn}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="dateOut" class="form-label">Tanggal Keluar (dd-MM-yyyy):</label>
+                            <input type="date" class="form-control" name="dateOut" th:value="${dateOut}">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Reservation List Section -->
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <h2 th:text="'Quota avalilable: '+${remainingQuota}"></h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="reservation, iterStat : ${reservations}">
+                                <td th:text="${iterStat.index + 1}"></td>
+                                <td th:text="${reservation.patient.name}"></td>
+                                <td>
+                                    <span th:if="${reservation.patient.gender}">Male</span>
+                                    <span th:unless="${reservation.patient.gender}">Female</span>
+                                </td>                            
+                                <td th:text="${reservation.patient.email}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>    
+            <div>
+                <a th:href="@{/rooms/{roomId}/update(roomId=${room.id})}" class="btn btn-warning">Update Ruangan</a>
+                <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Delete Ruangan
+                </a>
+            </div>
+            
+            
+            
+            <div>
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this room: <strong th:text="${room.name}"></strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <form th:action="@{/rooms/{roomId}/delete(roomId=${room.id})}" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+
+<script>
+    const myModal = document.getElementById('myModal')
+    const myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', () => {
+    myInput.focus()
+    })
+</script>
+
+</html>
